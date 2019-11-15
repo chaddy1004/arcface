@@ -26,8 +26,7 @@ class Res50(BaseModel):
     def compile_backbone(self, model_name):
         return
 
-    def define_full(self, model_name):
-        backbone = self.define_backbone(model_name="backbone_for_full")
+    def define_full(self, backbone, model_name):
         x = Lambda(lambda _x: tf.math.l2_normalize(_x))(backbone.output)
         x = L2Normalize(Dense(self.config.data.n_classes))(x)
         x = Arccos(self.config.model.hyperparameters.m, self.config.model.hyperparameters.s)(x)
