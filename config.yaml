@@ -1,0 +1,29 @@
+---
+exp:
+  name: "arcface"
+  experiment_dir: "/data/arcface/"
+data:
+  train_faces_path: "/datasets/faces/train/*"
+  valid_faces_path: "/datasets/faces/test/*"
+  img_size: 112
+  img_channels: 3
+  n_workers: 2
+model:
+  structure: "Resnet100"
+  hyperparameters:
+    m: 0.5 #angular margin
+    s: 64 #feature scale
+    lr: 0.0001
+    beta1: 0.5
+    beta2: 0.999
+    clipvalue: 0
+    clipnorm: 0
+trainer:
+  num_epochs: 11000
+  batch_size: 10
+  use_lr_decay: false
+  save_checkpoint_freq: 10
+  keep_checkpoint_freq: 50
+  valid_freq: 10
+  n_gpus: 1
+  gpu_memory_fraction: 0.9
