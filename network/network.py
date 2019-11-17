@@ -8,8 +8,8 @@ from utils.layers import L2Normalize, Arccos
 
 
 class Res50(BaseModel):
-
-    def define_backbone(self, model_name: str):
+    # Backbone is used for valid and prediction and only outptus 512-sized feature embedding
+    def define_backbone(self,model_name: str):
         input = Input(shape=(self.config.data.img_size, self.config.data.img_size, self.config.data.img_channels),
                       name="img_in")  # check and delete if this is not neccessary
         res50 = tf.keras.applications.ResNet50(include_top=False, input_shape=(None, None, 3))
@@ -23,10 +23,11 @@ class Res50(BaseModel):
         backbone = Model(inputs=input, outputs=feature, name=model_name)
         return backbone
 
-    def compile_backbone(self, model_name):
+    def build_backbone(self, model_name):
         return
 
-    def define_full(self, backbone, model_name):
+    # full model is the one with softmax at the end for meta learning stage. It is made with the backbone
+    def define_full(self, backbone,model_name):
         x = Lambda(lambda _x: tf.math.l2_normalize(_x))(backbone.output)
         x = L2Normalize(Dense(self.config.data.n_classes))(x)
         x = Arccos(self.config.model.hyperparameters.m, self.config.model.hyperparameters.s)(x)
@@ -34,5 +35,5 @@ class Res50(BaseModel):
         full_model = Model(inputs=backbone.inputs, outputs=x, name=model_name)
         return full_model
 
-    def compile_full(self, model_name):
+    def build_full(self, model_name):
         return

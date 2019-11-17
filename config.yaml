@@ -9,7 +9,7 @@ data:
   img_channels: 3
   n_workers: 2
 model:
-  structure: "Resnet100"
+  architecture: "Resnet100"
   hyperparameters:
     m: 0.5 #angular margin
     s: 64 #feature scale

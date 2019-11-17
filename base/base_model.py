@@ -11,7 +11,7 @@ class BaseModel:
         raise NotImplementedError
 
     @abc.abstractmethod
-    def compile_backbone(self, **kwargs):
+    def build_backbone(self, **kwargs):
         raise NotImplementedError
 
     @abc.abstractmethod
@@ -19,7 +19,7 @@ class BaseModel:
         raise NotImplementedError
 
     @abc.abstractmethod
-    def compile_full(self, **kwargs):
+    def build_full(self, **kwargs):
         raise NotImplementedError
 
 
