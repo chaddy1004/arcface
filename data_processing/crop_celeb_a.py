@@ -8,6 +8,28 @@ from collections import defaultdict
 
 def crop(src_file, tar_file, img_size, detector):
     img = cv2.cvtColor(cv2.imread(src_file), cv2.COLOR_BGR2RGB)
+    # try:
+    #     info_json = detector.detect_faces(img)[0]
+    # except IndexError:
+    #     print(f"Could not locate face on {src_file}")
+    #     return
+    #
+    # x, y, w, h = info_json["box"]
+    # try:
+    #     cropped = img[y:y + h, x:x + w, ...]
+    # except IndexError:
+    #     print(src_file, info_json["box"])
+    #     return
+    # try:
+    #     cropped = cv2.resize(src=cropped, dsize=(img_size, img_size), interpolation=cv2.INTER_NEAREST)
+    # except cv2.error:
+    #     print(img[y:y + h, x:x + w, ...], x, y, w, h)
+    #     return
+    #
+    # cropped = cv2.cvtColor(cropped, cv2.COLOR_RGB2BGR)
+    # cv2.imwrite(filename=tar_file, img=cropped)
+    # print(f"saved to {tar_file}")
+
     try:
         info_json = detector.detect_faces(img)[0]
     except IndexError:

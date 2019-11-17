@@ -11,7 +11,9 @@ def get_network_builder(config):
 
 def build_model_and_trainer(config, data_loader):
     network_builder = get_network_builder(config=config)
-    backbone = network_builder.build_backbone(model_name="backbone")
-    full_model = network_builder.build_full(model_name="full")
-    trainer = Trainer(data_loader=data_loader, config=config)
+    backbone = network_builder.define_backbone(model_name="backbone")
+    full_model = network_builder.build_full(backbone=backbone, model_name="full")
+    # TODO: Finish implementing the trainer
+    # trainer = Trainer(data_loader=data_loader, config=config, backbone=backbone, full=full_model)
+    trainer = None
     return backbone, full_model, trainer
