@@ -1,3 +1,8 @@
 .idea/*
 data_processing/.idea/*
-__pychache__/*
+__pycache__/*
+network/__pycache__/*
+utils/__pycache__/*
+trainers/__pycache__/*
+dataloader/__pycache__/*
+base/__pycache__/*
