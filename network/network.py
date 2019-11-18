@@ -14,16 +14,15 @@ class Res50(BaseModel):
     # Backbone is used for valid and prediction and only outptus 512-sized feature embedding
     def define_backbone(self, model_name: str):
         image = Input(shape=(self.config.data.img_size, self.config.data.img_size, self.config.data.img_channels),
-                      name="img_in")  # check and delete if this is not neccessary
+                      name="img_in")  # check and delete if this is not necessary
         res50 = tf.keras.applications.ResNet50(include_top=False, input_shape=(None, None, 3))
         x = res50(image)
         x = GlobalAveragePooling2D()(x)
         x = BatchNormalization()(x)
-        # x = BatchNormalization()(res50.output)
         x = Dropout(0.3)(x)
         x = Dense(512)(x)
         feature = BatchNormalization()(x)
-        feature = Lambda(lambda _x: tf.math.l2_normalize(_x))(feature)
+        feature = Lambda(lambda _x: tf.math.l2_normalize(_x))(feature) # normalizing the feature vector
         backbone = Model(inputs=image, outputs=feature, name=model_name)
         return backbone
 
@@ -36,7 +35,6 @@ class Res50(BaseModel):
         image = Input(shape=(self.config.data.img_size, self.config.data.img_size, self.config.data.img_channels),
                       name="img_in_full")  # check and delete if this is not neccessary
         feature = backbone(image)
-        # logit_pre = Dense(self.config.data.n_classes)(feature)
         logit_pre = L2Normalize(Dense(units=self.config.data.n_classes))(feature)  # dim: n_class
         full_model = Model(inputs=image, outputs=logit_pre, name=model_name)
         return full_model

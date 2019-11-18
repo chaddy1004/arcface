@@ -45,7 +45,11 @@ class Trainer(BaseTrainer):
                         tf.summary.scalar(name, value, num_steps)
                 num_steps += 1
             valid_metric_names = self.valid_metric_names()
+            test_loss = 0
+            test_acc = 0
+            num_steps = 0
             for img_src, img_tar, match in self.test_dataset:
+                pass
                 # img_src is the image that is being compared to target image (img_tar). Match is boolean on whether img_src and img_tar is saame person (match = True) or not (match = False)
                 # If prediction for img_src says it is same as , it is tp (true positive), and so on
                 # REQUIRE CUSTOM MATCH
