@@ -49,5 +49,5 @@ class Res50(BaseModel):
                    beta_2=self.config.model.hyperparameters.beta2,
                    clipvalue=self.config.model.hyperparameters.clipvalue,
                    clipnorm=self.config.model.hyperparameters.clipnorm)
-        full_model.compile(optimizer=opt, loss="categorical_crossentropy", metrics=["accuracy"])
+        full_model.compile(optimizer=opt, loss=arcface, metrics=["accuracy"])
         return full_model
