@@ -35,6 +35,7 @@ class Res50(BaseModel):
         image = Input(shape=self.config.data.img_shape, name="img_in_full")
         feature = backbone(image)
         logit_pre = L2Normalize(Dense(units=self.config.data.n_classes))(feature)  # dim: n_class
+        # logit_pre = Dense(units=self.config.data.n_classes)(feature)
         logit_pre = Activation("softmax")(logit_pre)
         full_model = Model(inputs=image, outputs=logit_pre, name=model_name)
         return full_model
