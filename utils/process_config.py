@@ -1,5 +1,8 @@
 import yaml
 from dotmap import DotMap
+from glob import glob
+import os
+
 
 def get_config_from_yml(yml_file):
     """
@@ -16,8 +19,12 @@ def get_config_from_yml(yml_file):
 
     return config, config_dict
 
+
 def process_config(yml_file):
     config, _ = get_config_from_yml(yml_file)
-    config.data.n_classes = 1000
+    config.data.n_classes = len(glob(config.data.train_faces_path[:-2]))  # to count number of folders of identities
+    config.data.img_shape = (config.data.img_size, config.data.img_size, config.data.img_channels)
+    exp_dir = os.path.join(config.exp.experiment_dir, config.exp.name)
+    config.exp.log_dir = os.path.join(exp_dir, "logs")  # where tensorboard scalars will be logged
+    os.makedirs(config.exp.log_dir, exist_ok=True)
     return config
-

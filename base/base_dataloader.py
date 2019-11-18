@@ -10,7 +10,7 @@ class BaseDataLoader:
         raise NotImplementedError
 
     @abc.abstractmethod
-    def get_validation_data_generator(self):
+    def get_valid_data_generator(self):
         raise NotImplementedError
 
     @abc.abstractmethod
@@ -22,7 +22,7 @@ class BaseDataLoader:
         raise NotImplementedError
 
     @abc.abstractmethod
-    def get_validation_data_size(self):
+    def get_valid_data_size(self):
         raise NotImplementedError
 
     @abc.abstractmethod
