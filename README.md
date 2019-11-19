@@ -55,10 +55,12 @@ The quantized model will be saved under directory
 ```
 
 ## TODO: Things that I must do 
-1. Train on Large Scale dataset and validate
+1. ~~Implement major components of the paper~~ (Completed)
+2. ~~Validate that the implementation is working by overfitting on small dataset~~ (Completed)
+3. Train on Large Scale dataset and validate
     - So far, I only confirmed that my implementation works by overfitting on very small data. I did not have the resource/time to train it on full data yet.
     - Also would need to add support for other datasets such as CASIA or Trillion Pairs
-2. Create separate Dataset for True Positive pairs and True Negative pairs
+4. Create separate Dataset for True Positive pairs and True Negative pairs
     - Currently, the dataset is implemented naively where the files are simply shuffled and zipped together. This creates a lot more True Negative samples
-3. Try to recreate the results from the paper
-4. Compare the performance of original model with quantized model
+5. Try to recreate the results from the paper
+6. Compare the performance of original model with quantized model
