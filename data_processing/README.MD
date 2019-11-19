@@ -10,7 +10,7 @@ Therefore, the data preprocessing code is compatible with CelebA data, hence the
 Note that MTCNN requires Tensorflow run, therefore install Tensorflow if you already have not. 
 
 
-## Train Data
+## Training Data
 ### 1. Downloading the Dataset
 Download the *img_align_celeba_png.7z* from [Multimedia Lab, The Chinese University of Hong Kong's Google Drive](https://drive.google.com/drive/folders/0B7EVK8r0v71pTUZsaXdaSnZBZzg)
 
@@ -68,6 +68,14 @@ arcface_sample
 where each directory under train are folders with each identity (1-10177 for CelebA dataset), and files in each folders are pictures of each identity.
 Put the absolute path of the top directory into config.yaml file under the field *train_faces_path*.
 
-##TODO
-1. Add instructions for validation set
+## Validation Data
+### 1. Downloading the Dataset
+Download the *CFPW dataset* from [CFPW dataset page](http://www.cfpw.io/)
+
+### 2. Extract the file
+Extract the file on the same directory as the training data is residing.
+
+### 3. Done
+The reading and processing of the data is done on [dataloader/dataloader.py](https://github.com/chaddy1004/arcface/blob/master/dataloader/dataloader.py) 
+
 
