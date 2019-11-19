@@ -7,5 +7,6 @@ def _arcface(y_true, y_pred, m, s):
     m_vector = m * one_hot
     y_pred = tf.acos(y_pred)
     margin_added = y_pred + m_vector
-    rescaled = s * margin_added
+    logit = tf.cos(margin_added)
+    rescaled = s * logit
     return K.categorical_crossentropy(target=y_true, output=rescaled, from_logits=True)
