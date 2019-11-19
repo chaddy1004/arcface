@@ -54,7 +54,7 @@ The quantized model will be saved under directory
 <config.experiment_dir>/saved_model
 ```
 
-##TODO: Things that I must do 
+## TODO: Things that I must do 
 1. Train on Large Scale dataset and validate
     - So far, I only confirmed that my implementation works by overfitting on very small data. I did not have the resource/time to train it on full data yet.
     - Also would need to add support for other datasets such as CASIA or Trillion Pairs
