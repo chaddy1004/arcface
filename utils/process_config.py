@@ -25,7 +25,13 @@ def process_config(yml_file):
     config.data.n_classes = len(glob(config.data.train_faces_path[:-2]))  # to count number of folders of identities
     # config.data.img_shape = (config.data.img_size, config.data.img_size, config.data.img_channels)
     config.data.img_shape = (None,None, config.data.img_channels)
-    exp_dir = os.path.join(config.exp.experiment_dir, config.exp.name)
+    exp_dir = os.path.join(config.exp.experiment_dir, config.exp.name) # where data for each experiment will be saved
+
+    # Directory where tensorboard scalars will be logged
     config.exp.log_dir = os.path.join(exp_dir, "logs")  # where tensorboard scalars will be logged
     os.makedirs(config.exp.log_dir, exist_ok=True)
+    # Directory where models will be saved
+    config.exp.saved_model_dir = os.path.join(exp_dir, "saved_model")
+    os.makedirs(config.exp.log_dir, exist_ok=True)
+
     return config

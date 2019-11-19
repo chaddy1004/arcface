@@ -1,3 +1,4 @@
+import os
 from collections import defaultdict
 
 import tensorflow as tf
@@ -44,6 +45,11 @@ class Trainer(BaseTrainer):
                         tf.summary.scalar(name, value, num_steps)
                 num_steps += 1
             # valid_metric_names = self.valid_metric_names()
+
+            if epoch + 1 % self.config.trainer.save_checkpoint_freq:
+                filename = os.path.join(self.config.exp.saved_model_dir, f'model.hdf5')
+                self.full.save(filename=filename, overwrite=True)
+
             # test_loss = 0
             # test_acc = 0
             # num_steps = 0
@@ -65,5 +71,5 @@ class Trainer(BaseTrainer):
             # with self.writer.as_default():
             #     tf.summary.scalar("loss/train", train_loss, epoch)
             #     tf.summary.scalar("acc/train", train_acc, epoch)
-                # tf.summary.scalar("loss/test", test_loss, epoch)
-                # tf.summary.scalar("acc/test", test_acc, epoch)
+            # tf.summary.scalar("loss/test", test_loss, epoch)
+            # tf.summary.scalar("acc/test", test_acc, epoch)
