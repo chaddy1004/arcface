@@ -5,6 +5,8 @@ from dataloader.dataloader import Dataloader
 def get_network_builder(config):
     if config.model.architecture == "ResNet50":
         return Res50(config)
+    elif config.model.architecture == "ResNet100":
+        return
     else:
         raise ValueError(f"unknown network architecture {config.model.architecture}")
 

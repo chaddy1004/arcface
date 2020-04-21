@@ -29,8 +29,9 @@ class Trainer(BaseTrainer):
         return ["tp", "tn", "fp", "fn"]
 
     def train(self):
+        num_steps = 0
+        num_steps_valid = 0
         for epoch in range(self.config.trainer.num_epochs):
-            num_steps = 0
             train_metric_names = self.train_metric_names()
             for img_train, label_train in self.train_ds:
                 metric_logs = {}
@@ -38,13 +39,12 @@ class Trainer(BaseTrainer):
                 assert len(loss) == len(train_metric_names)
                 for metric_name, metric_val in zip(train_metric_names, loss):
                     metric_logs[f"train/{metric_name}"] = metric_val
-                print(f"Epoch:{epoch} Step:{num_steps} train_loss: {loss[0]}, train_acc: {loss[1]}")
+                print(f"Train::Epoch:{epoch} Step:{num_steps} train_loss: {loss[0]}, train_acc: {loss[1]}")
                 with self.writer.as_default():
                     for name, value in metric_logs.items():
                         tf.summary.scalar(name, value, num_steps)
                 num_steps += 1
 
-            num_steps = 0
             for img_src, img_tar, gt in self.valid_ds:
                 src_feature = self.backbone(img_src)
                 tar_feature = self.backbone(img_tar)
@@ -73,12 +73,12 @@ class Trainer(BaseTrainer):
 
                 with self.writer.as_default():
                     for name, value in metric_logs.items():
-                        tf.summary.scalar(name, value, num_steps)
+                        tf.summary.scalar(name, value, num_steps_valid)
 
                 acc_tn = metric_logs[f"valid/acc_tn"]
                 acc_tp = metric_logs[f"valid/acc_tp"]
-                print(f"Epoch:{epoch} Step:{num_steps} acc_tn: {acc_tn}, acc_tp: {acc_tp}")
-                num_steps += 1
+                print(f"Valid::Epoch:{epoch} Step:{num_steps_valid} acc_tn: {acc_tn}, acc_tp: {acc_tp}")
+                num_steps_valid += 1
 
             if epoch + 1 % self.config.trainer.save_checkpoint_freq:
                 filename = os.path.join(self.config.exp.saved_model_dir, f'model.hdf5')
