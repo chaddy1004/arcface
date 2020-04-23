@@ -28,19 +28,24 @@ def _generator(valid_path, img_size):
 
 
 class Dataloader(BaseDataLoader):
-    def __init__(self, config):
+    def __init__(self, config, init_train=True):
         super().__init__(config)
         self.train_ds = None
         self.valid_ds = None  # valid dataset for true negative pairs
-        self.train_size = len(glob(self.config.data.train_faces_path))
+        self.test_ds = None
+
         self.valid_size = len(glob(self.config.data.valid_faces_path))
+        self.test_size = len(glob(self.config.data.test_faces_path))
 
         # initialize datasets
-        self.init_train_ds()
+        if init_train:
+            self.train_size = len(glob(self.config.data.train_faces_path))
+            self.init_train_ds()
         self.init_valid_ds()
+        self.init_test_ds()
 
     @staticmethod
-    def _process_path_train(file_path, depth, on_value=1.0, off_value=0.0):
+    def _process_path(file_path, depth, on_value=1.0, off_value=0.0):
         label_int = int(tf.strings.split(file_path, "/")[-2])
         label = tf.one_hot(indices=label_int, depth=depth, on_value=on_value, off_value=off_value)
         img = tf.io.read_file(file_path)
@@ -49,13 +54,32 @@ class Dataloader(BaseDataLoader):
         return img, label
 
     def init_train_ds(self):
-        process_path_train = partial(self._process_path_train, depth=self.config.data.n_classes, on_value=1.0,
+        process_path_train = partial(self._process_path, depth=self.config.data.n_classes, on_value=1.0,
                                      off_value=0.0)
         self.train_ds = tf.data.Dataset.list_files(self.config.data.train_faces_path)
         self.train_ds = self.train_ds.shuffle(self.train_size)
         self.train_ds = self.train_ds.map(process_path_train, num_parallel_calls=self.config.data.n_workers)
         self.train_ds = self.train_ds.batch(batch_size=self.config.trainer.train_batch_size)
         self.train_ds = self.train_ds.prefetch(1)
+        return
+
+    @staticmethod
+    def _process_path_test(file_path, depth, on_value=1.0, off_value=0.0):
+        label_int = int(tf.strings.split(file_path, "/")[-2])
+        img = tf.io.read_file(file_path)
+        img = tf.image.decode_jpeg(img, channels=3)
+        img = tf.image.resize(img, [112, 112])
+        img = tf.image.convert_image_dtype(img, tf.float32)
+        return img, label_int
+
+    def init_test_ds(self):
+        process_path = partial(self._process_path_test, depth=self.config.data.n_classes, on_value=1.0,
+                               off_value=0.0)
+        self.test_ds = tf.data.Dataset.list_files(self.config.data.test_faces_path)
+        self.test_ds = self.test_ds.shuffle(self.test_size)
+        self.test_ds = self.test_ds.map(process_path, num_parallel_calls=self.config.data.n_workers)
+        self.test_ds = self.test_ds.batch(batch_size=8)
+        self.test_ds = self.test_ds.prefetch(1)
         return
 
     def init_valid_ds(self):
@@ -75,8 +99,14 @@ class Dataloader(BaseDataLoader):
     def get_valid_data_generator(self):
         return self.valid_ds
 
+    def get_test_data_generator(self):
+        return self.test_ds
+
     def get_train_data_size(self):
         return self.train_size
 
     def get_valid_data_size(self):
         return self.valid_size
+
+    def get_test_data_size(self):
+        return self.test_size

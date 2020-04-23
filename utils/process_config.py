@@ -33,5 +33,6 @@ def process_config(yml_file):
     # Directory where models will be saved
     config.exp.saved_model_dir = os.path.join(exp_dir, "saved_model")
     os.makedirs(config.exp.saved_model_dir, exist_ok=True)
+    config.exp.embedding_dir = os.path.join(exp_dir, "embeddings")
 
     return config

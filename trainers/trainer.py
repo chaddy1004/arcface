@@ -54,6 +54,7 @@ class Trainer(BaseTrainer):
                 result_logs = defaultdict(int)
                 assert len(gt_list) == len(result_list)
                 for true, result in zip(gt_list, result_list):
+                    print(f"true: {true}, reslut: {result}")
                     if true and result:
                         result_logs["tp"] += 1
                     elif not true and not result:
